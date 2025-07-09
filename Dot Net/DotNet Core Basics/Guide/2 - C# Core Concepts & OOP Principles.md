@@ -68,6 +68,56 @@
   }
   ```
 
+  ### ✅ Types of Inheritance in C\#
+
+    Inheritance allows a class to acquire members (fields, methods) of another class.
+
+    #### **1. Single Inheritance:**
+
+    One class inherits from a single base class.
+
+    ```csharp
+    class Animal { }
+    class Dog : Animal { }
+    ```
+
+    #### **2. Hierarchical Inheritance:**
+
+    Multiple classes inherit from a single base class.
+
+    ```csharp
+    class Animal { }
+    class Dog : Animal { }
+    class Cat : Animal { }
+    ```
+
+    #### **3. Multilevel Inheritance:**
+
+    A derived class acts as a base class for another derived class.
+
+    ```csharp
+    class Animal { }
+    class Mammal : Animal { }
+    class Dog : Mammal { }
+    ```
+
+    #### **Note:**
+
+    C# does not support **multiple inheritance** with classes to avoid ambiguity but supports it through **interfaces**.
+
+    #### Example with Interface:
+
+    ```csharp
+    interface IWalk { void Walk(); }
+    interface IBark { void Bark(); }
+
+    class Dog : IWalk, IBark
+    {
+        public void Walk() => Console.WriteLine("Dog walking");
+        public void Bark() => Console.WriteLine("Dog barking");
+    }
+    ```
+
 * **Polymorphism**: Same method behaves differently in different contexts.
 
   **Real-life Example:**
@@ -89,6 +139,47 @@
       public override void Draw() => Console.WriteLine("Drawing rectangle");
   }
   ```
+
+  ## ✅ Types of Polymorphism in C\#
+
+    Polymorphism allows objects to take on many forms. In C#, it enables a single interface to represent different underlying forms (data types).
+
+    ### **1. Compile-time Polymorphism (Static Polymorphism):**
+
+    Achieved through **method overloading** and **operator overloading**.
+
+    #### Method Overloading Example:
+
+    ```csharp
+    public class Calculator
+    {
+        public int Add(int a, int b) => a + b;
+        public double Add(double a, double b) => a + b;
+    }
+    ```
+
+    ---
+
+    ### **2. Runtime Polymorphism (Dynamic Polymorphism):**
+
+    Achieved through **method overriding** with **inheritance** and **virtual methods**.
+
+    #### Method Overriding Example:
+
+    ```csharp
+    public class Animal
+    {
+        public virtual void Speak() => Console.WriteLine("Animal speaks");
+    }
+
+    public class Dog : Animal
+    {
+        public override void Speak() => Console.WriteLine("Dog barks");
+    }
+
+    Animal animal = new Dog();
+    animal.Speak(); // Output: Dog barks
+    ```
 
 ---
 

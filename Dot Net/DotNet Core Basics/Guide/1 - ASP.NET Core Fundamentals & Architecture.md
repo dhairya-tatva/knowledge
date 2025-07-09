@@ -34,6 +34,56 @@ public class Program
   * `ConfigureServices`: Registers services for Dependency Injection.
   * `Configure`: Defines how HTTP requests are handled (middleware pipeline).
 
+#### **Example:**
+
+```csharp
+// This method gets called by the runtime. Use this method to add services to the container.
+public void ConfigureServices(IServiceCollection services)
+{
+    // Register Controllers
+    services.AddControllers();
+
+    // Register Swagger for API documentation
+    services.AddSwaggerGen(c =>
+    {
+        c.SwaggerDoc("v1", new OpenApiInfo { Title = "AIT.UI.FileServer", Version = "v1" });
+    });
+
+    // Example of adding a custom Swagger operation filter
+    services.AddSwaggerGen(c =>
+    {
+        c.OperationFilter<SwaggerFileOperationFilter>();
+    });
+}
+```
+
+```csharp
+// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+{
+    if (env.IsDevelopment())
+    {
+        app.UseDeveloperExceptionPage(); // Developer error page for debugging
+
+        // Enable Swagger in development environment
+        app.UseSwagger();
+        app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "AIT.UI.FileServer v1"));
+    }
+
+    app.UseStaticFiles(); // Serve static files like JS, CSS, images
+
+    app.UseRouting(); // Enable routing
+
+    app.UseAuthorization(); // Apply authorization
+
+    // Map controller routes
+    app.UseEndpoints(endpoints =>
+    {
+        endpoints.MapControllers();
+    });
+}
+```
+
 ---
 
 ## ✅ Dependency Injection (DI) in .NET Core
@@ -74,21 +124,113 @@ public class Program
 
 ---
 
-## ✅ Ways of Object Creation in C#
+## ✅ Ways of Object Creation in C\#
 
-* Using `new` keyword:
+In C#, there are multiple ways to create objects. Understanding them helps you choose the most appropriate method for different scenarios.
 
-```csharp
-var obj = new MyClass();
-```
+### **1. Using `new` Keyword (Direct Instantiation):**
 
-* Factory pattern (using factory methods).
-* Dependency Injection (let the DI container create objects).
-* Reflection (less common for interviews):
+The most common way to create an object.
 
 ```csharp
-var obj = Activator.CreateInstance(typeof(MyClass));
+Person person = new Person();
 ```
+
+---
+
+### **2. Using Parameterized Constructors:**
+
+Allows initializing object properties during creation.
+
+```csharp
+Person person = new Person("Alice", 25);
+```
+
+---
+
+### **3. Using Object Initializer:**
+
+Simpler syntax for setting properties at the time of object creation.
+
+```csharp
+Person person = new Person { Name = "John", Age = 30 };
+```
+
+---
+
+### **4. Using Factory Methods (Static Methods):**
+
+Encapsulates object creation logic within a static method.
+
+```csharp
+public static Person CreatePerson()
+{
+    return new Person { Name = "Factory Person", Age = 40 };
+}
+
+Person person = Person.CreatePerson();
+```
+
+---
+
+### **5. Using Dependency Injection (DI):**
+
+Objects are automatically created and injected by the .NET Core DI container.
+
+```csharp
+public class HomeController
+{
+    private readonly IService _service;
+
+    public HomeController(IService service)
+    {
+        _service = service;
+    }
+}
+```
+
+---
+
+### **6. Using Reflection (Advanced & Rare in Interviews):**
+
+Used for dynamic object creation at runtime.
+
+```csharp
+Type type = typeof(Person);
+object person = Activator.CreateInstance(type);
+```
+
+---
+
+### **7. Using Cloning (ICloneable Interface or Custom Method):**
+
+Creates a copy of an existing object.
+
+```csharp
+Person person2 = person1.Clone();
+```
+
+---
+
+### **When to Use What:**
+
+| Method                    | When to Use                                           |
+| ------------------------- | ----------------------------------------------------- |
+| `new` Keyword             | Simple, direct creation.                              |
+| Parameterized Constructor | When initialization values are required at creation.  |
+| Object Initializer        | Easy property setting during creation.                |
+| Factory Method            | When creation needs additional logic or abstraction.  |
+| Dependency Injection      | For scalable, testable, loosely-coupled applications. |
+| Reflection                | When type is unknown at compile time (rare cases).    |
+| Cloning                   | When an identical copy of an object is needed.        |
+
+---
+
+### ✅ **Best Practice:**
+
+* Use the simplest method that fits your need.
+* Prefer Dependency Injection for shared services in ASP.NET Core.
+* Avoid reflection unless absolutely necessary.
 
 ---
 
@@ -113,7 +255,7 @@ app.Use(async (context, next) => {
 
 ---
 
-## ✅ Filters (ASP.NET Core MVC)
+## ✅ Filters (ASP.NET Core)
 
 Filters allow you to execute code before or after specific stages in the MVC request pipeline. They help with cross-cutting concerns such as logging, exception handling, authorization, and response formatting.
 
