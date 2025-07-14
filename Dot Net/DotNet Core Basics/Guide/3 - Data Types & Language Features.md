@@ -108,13 +108,69 @@ foreach (var num in query)
 }
 ```
 
-### **Common LINQ Methods:**
+### **Common LINQ Methods with Examples:**
 
-* `Where`: Filters elements.
-* `Select`: Projects/Transforms elements.
-* `OrderBy` / `OrderByDescending`: Sorts elements.
-* `GroupBy`: Groups elements.
-* `Sum`, `Count`, `Average`: Aggregate operations.
+* `Where`: Filters elements based on condition
+
+```csharp
+var evenNumbers = numbers.Where(n => n % 2 == 0);
+```
+
+* `Select`: Projects each element into a new form
+
+```csharp
+var squares = numbers.Select(n => n * n);
+```
+
+* `OrderBy` / `OrderByDescending`: Sorts elements
+
+```csharp
+var sorted = numbers.OrderBy(n => n);
+var descending = numbers.OrderByDescending(n => n);
+```
+
+* `First`, `FirstOrDefault`, `Last`, `Single`
+
+```csharp
+var firstEven = numbers.First(n => n % 2 == 0);
+var maybeValue = numbers.FirstOrDefault(n => n > 100); // returns 0 if not found
+```
+
+* `Any`, `All`, `Contains`
+
+```csharp
+bool hasOdd = numbers.Any(n => n % 2 != 0);
+bool allPositive = numbers.All(n => n > 0);
+bool containsFive = numbers.Contains(5);
+```
+
+* `Count`, `Sum`, `Average`, `Max`, `Min`
+
+```csharp
+int count = numbers.Count();
+int total = numbers.Sum();
+double average = numbers.Average();
+```
+
+* `GroupBy`: Groups elements by a key
+
+```csharp
+var peopleByCity = people.GroupBy(p => p.City);
+
+foreach (var group in peopleByCity)
+{
+    Console.WriteLine($"City: {group.Key}");
+    foreach (var person in group)
+        Console.WriteLine($" - {person.Name}");
+}
+```
+
+* `ToList`, `ToArray`, `ToDictionary`
+
+```csharp
+List<int> list = numbers.ToList();
+Dictionary<int, string> dict = list.ToDictionary(n => n, n => $"Number: {n}");
+```
 
 ### **Real-life Example:**
 

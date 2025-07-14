@@ -107,6 +107,8 @@
 
     #### Example with Interface:
 
+    ##### ✅ Without Default Implementation
+
     ```csharp
     interface IWalk { void Walk(); }
     interface IBark { void Bark(); }
@@ -115,6 +117,25 @@
     {
         public void Walk() => Console.WriteLine("Dog walking");
         public void Bark() => Console.WriteLine("Dog barking");
+    }
+    ```
+
+    ##### ✅ With Default Implementation (C# 8.0 and above)
+
+    ```csharp
+    interface IWalk
+    {
+        void Walk() => Console.WriteLine("walking");
+    }
+
+    interface IBark
+    {
+        void Bark() => Console.WriteLine("barking");
+    }
+
+    class Dog : IWalk, IBark
+    {
+        // Optionally override default interface methods
     }
     ```
 
@@ -195,6 +216,118 @@
 
   * Hold reference to data on heap.
   * Examples: `class`, `array`, `string`.
+
+### 🔹 Example:
+
+```csharp
+struct Point
+{
+    public int X;
+    public int Y;
+}
+
+class Person
+{
+    public string Name;
+}
+
+Point p1 = new Point { X = 1, Y = 2 };
+Point p2 = p1; // p2 is a copy of p1
+p2.X = 100;
+Console.WriteLine(p1.X); // Output: 1 (value type copied)
+
+Person person1 = new Person { Name = "Alice" };
+Person person2 = person1; // person2 references the same object
+person2.Name = "Bob";
+Console.WriteLine(person1.Name); // Output: Bob (reference type points to same memory)
+```
+
+## ✅ Pass by Value vs Pass by Reference
+
+In C#, method parameters can be passed in two main ways:
+
+
+### 🔹 **Pass by Value (Default)**
+
+* When a variable is passed **by value**, a **copy** of the variable is passed into the method.
+* Changes made inside the method **do not affect** the original variable.
+
+#### **Example:**
+
+```csharp
+public void ModifyValue(int x)
+{
+    x = 100;
+}
+
+int a = 10;
+ModifyValue(a);
+Console.WriteLine(a); // Output: 10
+```
+
+In this case, `a` remains unchanged because `x` is just a copy.
+
+---
+
+### 🔹 **Pass by Reference (using `ref` or `out`)**
+
+* When passed **by reference**, the method receives a **reference** to the original variable.
+* Changes inside the method **affect the original variable**.
+
+#### **Using `ref`:**
+
+```csharp
+public void ModifyRefValue(ref int x)
+{
+    x = 100;
+}
+
+int a = 10;
+ModifyRefValue(ref a);
+Console.WriteLine(a); // Output: 100
+```
+
+* The `ref` keyword must be used in **both** method signature and method call.
+
+#### **Using `out`:**
+
+```csharp
+public void SetOutValue(out int x)
+{
+    x = 42;
+}
+
+int result;
+SetOutValue(out result);
+Console.WriteLine(result); // Output: 42
+```
+
+* `out` is used when a method returns multiple values.
+* The variable **must** be assigned a value before the method ends.
+
+---
+
+### 🔸 **Key Differences between `ref` and `out`**
+
+| Feature        | `ref`                          | `out`                          |
+| -------------- | ------------------------------ | ------------------------------ |
+| Initialization | Must be initialized before use | Doesn't need to be initialized |
+| Assignment     | Optional in method             | Must be assigned in method     |
+
+---
+
+### ✅ Real-Life Analogy
+
+* **Pass by Value**: Giving someone a photocopy of a document. Changes on the copy don't affect the original.
+* **Pass by Reference**: Giving someone the original document. Any change they make will affect the original.
+
+---
+
+### ✅ Best Practices
+
+* Use **`ref`** when you want to modify the caller's variable.
+* Use **`out`** when you want the method to return multiple values.
+* Default to pass-by-value unless mutation is required.
 
 ---
 
